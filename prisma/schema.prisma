@@ -1,0 +1,82 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model College {
+  id               String      @id @default(uuid())
+  name             String
+  description      String
+  location         String
+  state            String
+  fees             Int         // Average annual fees in INR (e.g. 250000)
+  rating           Float       @default(4.0)
+  established      Int         // E.g. 1951
+  type             String      // "IIT", "NIT", "Private", "Central"
+  logoUrl          String
+  coverUrl         String
+  website          String
+  placementAvg     Float       // In LPA (e.g. 20.5)
+  placementHighest Float       // In LPA (e.g. 64.0)
+  courses          Course[]
+  cutoffs          Cutoff[]
+  reviews          Review[]
+  savedBy          SavedItem[]
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  collegeId   String
+  college     College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  name        String  // E.g. "B.Tech Computer Science"
+  duration    String  // E.g. "4 Years"
+  fees        Int     // Course-specific annual fee
+  eligibility String  // E.g. "JEE Main"
+}
+
+model Cutoff {
+  id          String  @id @default(uuid())
+  collegeId   String
+  college     College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  exam        String  // "JEE Main", "JEE Advanced", "CAT", "NEET"
+  branch      String  // E.g. "Computer Science & Engineering"
+  category    String  // "General", "OBC", "SC", "ST"
+  gender      String  @default("Gender-Neutral")
+  closingRank Int     // The maximum qualifying rank for cutoff matching
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  userName  String
+  rating    Float
+  comment   String
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String      @id @default(uuid())
+  email     String      @unique
+  password  String      // Hashed password
+  name      String
+  saved     SavedItem[]
+  createdAt DateTime    @default(now())
+}
+
+model SavedItem {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, collegeId])
+}
