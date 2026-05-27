@@ -50,9 +50,17 @@ export default function ComparePage() {
   const emptySlots = Array.from({ length: Math.max(0, 3 - fullColleges.length) });
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col selection:bg-indigo-500/30">
       <Navbar />
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <Link 
+          href="/colleges" 
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 mb-6 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Back to Directory</span>
+        </Link>
 
         {/* Header */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -262,7 +270,7 @@ export default function ComparePage() {
         )}
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

@@ -6,7 +6,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CompareDrawer from '@/components/CompareDrawer';
 import { 
-  GraduationCap, Sparkles, AlertCircle, ArrowRight, Star, 
+  GraduationCap, Sparkles, AlertCircle, ArrowRight, ArrowLeft, Star, 
   MapPin, Briefcase, IndianRupee, RotateCcw, CheckCircle2, 
   Search, ShieldAlert, Award
 } from 'lucide-react';
@@ -106,10 +106,17 @@ export default function PredictorPage() {
   const reach = results.filter((r) => r.probability === 'Reach');
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col selection:bg-indigo-500/30">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        <Link 
+          href="/colleges" 
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 mb-6 transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          <span>Back to Directory</span>
+        </Link>
         {/* Header Title */}
         <div className="text-center max-w-3xl mx-auto mb-10 space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 text-xs font-extrabold uppercase tracking-wider border border-indigo-200/35">
@@ -344,7 +351,7 @@ export default function PredictorPage() {
       <CompareDrawer />
 
       <Footer />
-    </>
+    </div>
   );
 }
 
