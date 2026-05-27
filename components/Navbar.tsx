@@ -32,94 +32,87 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full glass-nav border-b border-card-border backdrop-blur-md">
+      <header className="sticky top-0 z-40 w-full glass-nav border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="bg-blue-600 group-hover:bg-blue-700 text-white p-2 rounded-xl transition-all duration-300">
-                  <GraduationCap className="h-6 w-6" />
-                </div>
-                <span className="font-extrabold text-xl tracking-tight text-blue-600 dark:text-blue-400">
-                  CampusFinder
+                <span className="font-display font-black text-xl tracking-tight uppercase text-foreground">
+                  CampusFinder.
                 </span>
               </Link>
             </div>
 
             {/* Navigation Links */}
-            <nav className="hidden md:flex space-x-1">
+            <nav className="hidden md:flex space-x-8">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href;
-                const Icon = link.icon;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 relative ${
+                    className={`flex items-center gap-2 py-2 text-sm font-medium transition-all relative ${
                       isActive
-                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        ? 'text-foreground'
+                        : 'text-neutral-500 hover:text-foreground'
                     }`}
                   >
-                    <Icon className="h-4 w-4" />
                     <span>{link.label}</span>
                     {link.badge && link.badge > 0 ? (
-                      <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-violet-600 text-[10px] font-bold text-white shadow-sm">
+                      <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-sm bg-foreground text-[10px] font-mono text-background">
                         {link.badge}
                       </span>
                     ) : null}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-0 w-full h-[2px] bg-accent" />
+                    )}
                   </Link>
                 );
               })}
             </nav>
 
             {/* Right side actions */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               {/* Saved list icon */}
               <Link
                 href="/colleges?saved=true"
-                className="relative p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800/60 transition-all duration-200"
-                title="Saved Colleges"
+                className="relative text-neutral-500 hover:text-foreground transition-all duration-200"
+                title="Saved Items"
               >
-                <Bookmark className="h-5 w-5" />
+                <span className="font-mono text-xs font-semibold uppercase tracking-widest text-foreground/70 hover:text-foreground">
+                  Saved [{savedIds.length}]
+                </span>
                 {savedIds.length > 0 && (
-                  <span className="absolute top-1 right-1 flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-600 dark:bg-indigo-400"></span>
-                  </span>
+                  <span className="absolute -top-1 -right-2 flex h-1.5 w-1.5 rounded-full bg-accent"></span>
                 )}
               </Link>
 
               {/* User Session */}
               {isLoggedIn && user ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4 border-l border-card-border pl-6">
                   <div className="hidden lg:flex flex-col text-right">
-                    <span className="text-xs font-semibold text-slate-900 dark:text-slate-200 leading-tight">
+                    <span className="text-xs font-mono font-semibold text-foreground leading-tight uppercase">
                       {user.name}
                     </span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                      {user.email}
+                    <span className="text-[10px] bg-accent text-accent-text px-1 mt-0.5 inline-block self-end uppercase">
+                      Student
                     </span>
-                  </div>
-                  <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                    {user.name.charAt(0).toUpperCase()}
                   </div>
                   <button
                     onClick={logout}
-                    className="p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all duration-200"
-                    title="Log Out"
+                    className="p-1 text-neutral-500 hover:text-accent transition-colors"
+                    title="Sign Out"
                   >
-                    <LogOut className="h-5 w-5" />
+                    <LogOut className="h-4 w-4" />
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-300 shadow-md shadow-indigo-200 dark:shadow-none hover:shadow-indigo-300 hover:scale-[1.02]"
+                  className="flex items-center gap-2 px-4 py-1.5 border border-foreground text-foreground hover:bg-foreground hover:text-background text-xs font-mono uppercase tracking-widest transition-all"
                 >
-                  <User className="h-4 w-4" />
-                  <span>Sign In</span>
+                  <span>Authenticate</span>
                 </button>
               )}
             </div>
@@ -129,42 +122,39 @@ export default function Navbar() {
 
       {/* Auth Modal */}
       {showAuthModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md glass-card bg-slate-900 border border-slate-800 text-white rounded-2xl overflow-hidden p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-none p-4">
+          <div className="w-full max-w-md bg-background border border-foreground text-foreground rounded-none overflow-hidden p-8 shadow-[8px_8px_0_0_#1A1A1A] relative animate-in fade-in duration-200">
             <button
               onClick={() => setShowAuthModal(false)}
-              className="absolute top-4 right-4 p-2 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition-all duration-200"
+              className="absolute top-4 right-4 p-1 px-2 border border-transparent hover:border-foreground transition-all duration-200"
             >
-              <X className="h-5 w-5" />
+              <span className="font-mono text-xs uppercase text-foreground">Close</span>
             </button>
 
-            <div className="flex flex-col items-center text-center mt-2 mb-6">
-              <div className="h-12 w-12 rounded-xl bg-indigo-600/20 text-indigo-400 flex items-center justify-center mb-3">
-                <Key className="h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-bold">Sign In to CampusFinder</h3>
-              <p className="text-sm text-slate-400 mt-1">
-                Access your bookmarked colleges & rank predictions
+            <div className="flex flex-col items-start text-left mt-2 mb-8 border-b border-foreground pb-6">
+              <h3 className="font-display text-2xl font-black uppercase">Authenticate.</h3>
+              <p className="font-mono text-xs text-foreground/70 mt-2 uppercase tracking-wide">
+                Access your bookmarked models & forecast comparisons.
               </p>
             </div>
 
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+            <form onSubmit={handleLoginSubmit} className="space-y-6">
+              <div className="space-y-1">
+                <label className="block font-mono text-[10px] font-black uppercase tracking-widest text-foreground/80 mb-2">
                   Full Name
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Demo Student"
+                  placeholder="e.g. Demo Sequence"
                   value={authName}
                   onChange={(e) => setAuthName(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-4 py-3 bg-transparent border border-foreground text-foreground placeholder-foreground/30 focus:outline-none rounded-none text-sm font-mono"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+              <div className="space-y-1">
+                <label className="block font-mono text-[10px] font-black uppercase tracking-widest text-foreground/80 mb-2">
                   Email Address
                 </label>
                 <input
@@ -173,28 +163,28 @@ export default function Navbar() {
                   placeholder="e.g. demo@campusfinder.com"
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                  className="w-full px-4 py-3 bg-transparent border border-foreground text-foreground placeholder-foreground/30 focus:outline-none rounded-none text-sm font-mono"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-indigo-900/30 hover:scale-[1.01]"
+                className="w-full py-4 bg-accent hover:bg-foreground text-white font-mono text-sm uppercase tracking-widest font-black transition-all duration-200 border-none"
               >
-                Sign In / Register
+                Initialize Session
               </button>
             </form>
 
-            <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+            <div className="mt-8 pt-4 border-t border-foreground/10 text-left">
               <button
                 type="button"
                 onClick={() => {
-                  setAuthName('Demo Student');
+                  setAuthName('Demo Reference');
                   setAuthEmail('demo@campusfinder.com');
                 }}
-                className="text-xs text-indigo-400 hover:text-indigo-300 font-medium underline underline-offset-4"
+                className="font-mono text-[10px] text-accent hover:text-foreground font-black uppercase tracking-wider underline underline-offset-4"
               >
-                Quick Fill Demo Account
+                Insert Dummy Payload
               </button>
             </div>
           </div>

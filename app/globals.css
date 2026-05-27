@@ -1,19 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --accent: 37, 99, 235; /* Blue-600 */
+  --background: #F7F7F5; /* Bone White / Alabaster */
+  --foreground: #1A1A1A; /* Off-black */
+  --card-bg: #FFFFFF;
+  --card-border: #E5E5E0;
+  --accent: #FF4F00; /* International Orange */
+  --accent-text: #FFFFFF;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #fafafa;
-    --card-bg: #111111;
-    --card-border: #1e1e1e;
+    --background: #111110; /* Deep Graphite */
+    --foreground: #F2F2F2;
+    --card-bg: #1A1A19;
+    --card-border: #2C2C2B;
+    --accent: #FF4F00;
+    --accent-text: #FFFFFF;
   }
 }
 
@@ -22,8 +25,12 @@
   --color-foreground: var(--foreground);
   --color-card-bg: var(--card-bg);
   --color-card-border: var(--card-border);
-  --font-sans: var(--font-geist-sans), Inter, system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-geist-mono), "SF Mono", Menlo, monospace;
+  --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
+  
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
+  --font-display: var(--font-bricolage), sans-serif;
 }
 
 body {
@@ -34,35 +41,57 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Minimal card style - no glass, just clean borders */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Minimal card style - sharp / tight borders, zero glass */
 .glass-card {
-  border-radius: 0.75rem;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+  }
 }
 
 .glass-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px rgba(0,0,0,0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card:hover {
+    box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
+  }
 }
 
 /* Sticky nav */
 .glass-nav {
-  background: var(--background);
-  border-bottom: 1px solid var(--card-border);
+  background-color: var(--background);
+  border-bottom: 1px solid var(--foreground);
 }
 
 /* Compare bottom tray */
 .glass-compare-bar {
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+  background-color: var(--background);
+  border-top: 1px solid var(--foreground);
+  box-shadow: 0 -10px 40px -10px rgba(0,0,0,0.1);
 }
 
 /* Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -70,21 +99,27 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 9999px;
+  background: var(--card-border);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--foreground);
 }
 
 /* Form focus states */
 input, select, textarea {
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  border-radius: 2px;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: rgb(var(--accent)) !important;
-  box-shadow: 0 0 0 2px rgba(var(--accent), 0.12);
+  border-color: var(--foreground) !important;
+  box-shadow: 2px 2px 0px 0px rgba(0,0,0,0.1) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  input:focus, select:focus, textarea:focus {
+    box-shadow: 2px 2px 0px 0px rgba(0,0,0,1) !important;
+  }
 }
